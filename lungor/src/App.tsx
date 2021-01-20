@@ -7,15 +7,17 @@ import LogIn from './components/log-in-page';
 function App() {
   return (
     <>
-      <Route path={'/login'}>
-        <Home/>
-      </Route>
-      <Route path={'/home'}>
-        <Poll/>
-      </Route>
-      <Route exact path={'/poll/:pollId'}>
-        <LogIn/>
-      </Route>
+      <Router>
+        <Route exact path={'/'}>
+          <LogIn/>
+        </Route>
+        <Route path={'/home'}>
+          <Home/>
+        </Route>
+        <Route exact path={'/poll/:pollId'}>
+          <Poll/>
+        </Route>
+      </Router>
     </>
   )
 }
