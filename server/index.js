@@ -19,9 +19,10 @@ const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-const {} = require('./handlers');
+const { newPoll } = require('./handlers');
 
 app.get('/', (req,res) => res.send('helloFromServer'));
+app.post('/api/newPoll', () => console.log('newPoll'))
 
 app.listen(PORT, () => console.log(`Listening on PORt ${PORT}`))
 

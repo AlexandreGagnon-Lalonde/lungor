@@ -9,6 +9,30 @@ const options = {
   useUnifiedTopology: true,
 };
 
-module.exports = {
+const newPoll = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
 
+  const { pollOptions, pollName } = req.params;
+  const pollBody = {
+    pollName,
+    ...pollOptions,
+  };
+
+  try {
+    await client.connect();
+
+    const db = client.db('lungor');
+
+    const poll = await db.collection('polls').insertOne(pollBody)
+    assert(1, poll.insertedCount);
+
+    res.status(201).json({ status: 201, success: true, poll });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+  client.close();
+}
+
+module.exports = {
+  newPoll
 }
