@@ -43,7 +43,7 @@ express()
 
 
   .get('/', (req,res) => res.send('helloFromServer'))
-  .post('/api/newpoll', () => console.log('newPoll'))
+  .post('/api/newpoll', newPoll)
 
   .listen(PORT, () => console.log(`Listening on PORt ${PORT}`))
 
