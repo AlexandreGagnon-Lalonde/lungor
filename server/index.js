@@ -21,10 +21,31 @@ const PORT = process.env.PORT || 3001;
 
 const { newPoll } = require('./handlers');
 
-app.get('/', (req,res) => res.send('helloFromServer'));
-app.post('/api/newPoll', () => console.log('newPoll'))
+express()
+  .use(function (req, res, next) {
+    res.header(
+      "Access-Control-Allow-Methods",
+      "OPTIONS, HEAD, GET, PUT, POST, DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+  })
+  .use(morgan("tiny"))
+  .use(express.static("./server/assets"))
+  .use(bodyParser.json())
+  .use(cors())
+  .use(express.urlencoded({ extended: false }))
+  .use("/", express.static(__dirname + "/"))
 
-app.listen(PORT, () => console.log(`Listening on PORt ${PORT}`))
+
+  .get('/', (req,res) => res.send('helloFromServer'))
+  .post('/api/newpoll', () => console.log('newPoll'))
+
+  .listen(PORT, () => console.log(`Listening on PORt ${PORT}`))
 
 // const POLL = {
 //   _id: 'pollName',
