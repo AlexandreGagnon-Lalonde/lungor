@@ -12,8 +12,9 @@ const options = {
 const newPoll = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { pollOptions, pollName } = req.params;
+  const { pollOptions, pollName } = req.body;
   const pollBody = {
+    _id: pollName,
     pollName,
     ...pollOptions,
   };
@@ -26,7 +27,7 @@ const newPoll = async (req, res) => {
     const poll = await db.collection('polls').insertOne(pollBody)
     assert(1, poll.insertedCount);
 
-    res.status(201).json({ status: 201, success: true, poll });
+    res.status(201).json({ status: 201, success: true });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   }
