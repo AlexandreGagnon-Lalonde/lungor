@@ -5,10 +5,10 @@ import { SERVER_URL } from '../../constant';
 function Home() {
   const [pollName, setPollName] = useState('');
   const [pollOptions, setPollOptions] = useState({
-    optionA: '',
-    optionB: '',
-    optionC: '',
-    optionD: '',
+    optionA: { key: '', dataArray: [] },
+    optionB: { key: '', dataArray: [], },
+    optionC: { key: '', dataArray: [], },
+    optionD: { key: '', dataArray: [], },
   });
 
   const handleSubmit = (ev) => {
@@ -39,16 +39,16 @@ function Home() {
         </label>
         <div>
           <label>
-            <input onChange={(ev) => setPollOptions({...pollOptions, optionA: `${ev.currentTarget.value}`})} id={'option-a'} type={'text'} placeholder={'Option A'} required />
+            <input onChange={(ev) => setPollOptions({...pollOptions, optionA: { ...pollOptions.optionA, key: `${ev.currentTarget.value}` }})} id={'option-a'} type={'text'} placeholder={'Option A'} required />
           </label>
           <label>
-            <input onChange={(ev) => setPollOptions({...pollOptions, optionB: `${ev.currentTarget.value}`})} id={'option-b'} type={'text'} placeholder={'Option B'} required />
+            <input onChange={(ev) => setPollOptions({...pollOptions, optionB: { ...pollOptions.optionB, key: `${ev.currentTarget.value}` }})} id={'option-b'} type={'text'} placeholder={'Option B'} required />
           </label>
           <label>
-            <input onChange={(ev) => setPollOptions({...pollOptions, optionC: `${ev.currentTarget.value}`})} id={'option-c'} type={'text'} placeholder={'Option C'} required />
+            <input onChange={(ev) => setPollOptions({...pollOptions, optionC: { ...pollOptions.optionC, key: `${ev.currentTarget.value}` }})} id={'option-c'} type={'text'} placeholder={'Option C'} required />
           </label>
           <label>
-            <input onChange={(ev) => setPollOptions({...pollOptions, optionD: `${ev.currentTarget.value}`})} id={'option-d'} type={'text'} placeholder={'Option D'} required />
+            <input onChange={(ev) => setPollOptions({...pollOptions, optionD: { ...pollOptions.optionD, key: `${ev.currentTarget.value}` }})} id={'option-d'} type={'text'} placeholder={'Option D'} required />
           </label>
         </div>
         <button type={"submit"}>Submit Poll</button>
