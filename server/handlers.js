@@ -14,7 +14,6 @@ const newPoll = async (req, res) => {
 
   const { pollOptions, pollName } = req.body;
   const pollBody = {
-    _id: pollName,
     pollName,
     ...pollOptions,
   };
@@ -34,6 +33,23 @@ const newPoll = async (req, res) => {
   client.close();
 }
 
+const getPolls = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  try {
+    await client.connect();
+
+    const db = client.db('lungor');
+
+    const polls = await db.collection('polls').find().toArray();
+
+    res.status(200).json({ status: 200, polls })
+  } catch(err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+}
+
 module.exports = {
-  newPoll
+  newPoll,
+  getPolls,
 }
