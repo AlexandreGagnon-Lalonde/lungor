@@ -33,11 +33,13 @@ function Home() {
 
   return (
     <div>
-      {/* {allPolls.map(poll => {
-        return <p>{poll.pollName}</p>
-      })
-
-      } */}
+      {/* <div>
+        {allPolls.map(poll => {
+          return <p>{poll.pollName}</p>
+        })
+  
+        }
+      </div> */}
       <form onSubmit={handleSubmit}>
         <label>
           <input onChange={(ev) => setPollName(ev.currentTarget.value)} type={'text'} placeholder={'Poll Name'} required />
