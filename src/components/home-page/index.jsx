@@ -11,6 +11,7 @@ function Home() {
     optionC: { key: '', dataArray: [], },
     optionD: { key: '', dataArray: [], },
   });
+  const [allPolls, setAllPolls] = useState([]);
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
@@ -31,6 +32,14 @@ function Home() {
       })
       .catch(err => console.log(err))
   }
+
+  React.useEffect(() => {
+    fetch(SERVER_URL + `/api/getpolls`)
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch(err => console.log(err))
+
+  }, [allPolls])
 
   return (
     <div>
