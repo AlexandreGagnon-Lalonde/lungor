@@ -34,11 +34,17 @@ function Home() {
   }
 
   React.useEffect(() => {
-    fetch(SERVER_URL + `/api/getpolls`)
+    if (allPolls.length === 0) {
+          fetch(SERVER_URL + `/api/getpolls`)
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        setAllPolls(data.polls)
+        console.log(data.polls)
+      })
       .catch(err => console.log(err))
 
+    }
+    console.log(allPolls)
   }, [allPolls])
 
   return (
@@ -68,13 +74,13 @@ function Home() {
         <button type={"submit"}>Submit Poll</button>
       </form> : <div onClick={() => setPollCreation(!pollCreation)}>Create A Poll</div> }
       
-      {/* <div>
+      <div>
         {allPolls.map(poll => {
           return <p>{poll.pollName}</p>
         })
   
         }
-      </div> */}
+      </div>
     </div>
   );
 }
