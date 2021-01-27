@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { SERVER_URL } from '../../constant';
 
 function Home() {
+  const [pollCreation, setPollCreation] = useState(false);
   const [pollName, setPollName] = useState('');
   const [pollOptions, setPollOptions] = useState({
     optionA: { key: '', dataArray: [] },
@@ -33,14 +34,11 @@ function Home() {
 
   return (
     <div>
-      {/* <div>
-        {allPolls.map(poll => {
-          return <p>{poll.pollName}</p>
-        })
-  
-        }
-      </div> */}
-      <form onSubmit={handleSubmit}>
+      <nav>
+
+      </nav>
+      {pollCreation ? <form onSubmit={handleSubmit}>
+        <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
         <label>
           <input onChange={(ev) => setPollName(ev.currentTarget.value)} type={'text'} placeholder={'Poll Name'} required />
         </label>
@@ -59,7 +57,15 @@ function Home() {
           </label>
         </div>
         <button type={"submit"}>Submit Poll</button>
-      </form>
+      </form> : <div onClick={() => setPollCreation(!pollCreation)}>Create A Poll</div> }
+      
+      {/* <div>
+        {allPolls.map(poll => {
+          return <p>{poll.pollName}</p>
+        })
+  
+        }
+      </div> */}
     </div>
   );
 }
