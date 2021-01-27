@@ -28,23 +28,25 @@ function Home() {
     })
       .then(res => res.json())
       .then(poll => {
-        console.log(poll)
+        fetchAllPolls()
       })
       .catch(err => console.log(err))
   }
 
+  const fetchAllPolls = () => {
+          fetch(SERVER_URL + `/api/getpolls`)
+        .then((res) => res.json())
+        .then((data) => {
+          setAllPolls(data.polls)
+        })
+        .catch(err => console.log(err))
+
+  }
+
   React.useEffect(() => {
     if (allPolls.length === 0) {
-          fetch(SERVER_URL + `/api/getpolls`)
-      .then((res) => res.json())
-      .then((data) => {
-        setAllPolls(data.polls)
-        console.log(data.polls)
-      })
-      .catch(err => console.log(err))
-
+      fetchAllPolls()
     }
-    console.log(allPolls)
   }, [allPolls])
 
   return (
@@ -75,10 +77,10 @@ function Home() {
       </form> : <div onClick={() => setPollCreation(!pollCreation)}>Create A Poll</div> }
       
       <div>
-        {allPolls.map(poll => {
-          return <p>{poll.pollName}</p>
-        })
-  
+        {
+          allPolls.map(poll => {
+            return <p>{poll.pollName}</p>
+          })
         }
       </div>
     </div>
