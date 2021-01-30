@@ -75,6 +75,26 @@ function Home() {
     setPollOptions(updatedOptions)
   }
 
+  const handleVote = (ev, _id, optionName) => {
+    ev.preventDefault();
+
+    fetch(SERVER_URL + `/api/votepoll`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        optionName,
+        _id,
+      })
+    })
+      .then(res => res.json())
+      .then(poll => {
+        fetchAllPolls()
+      })
+      .catch(err => console.log(err))
+  }
+console.log(allPolls)
   React.useEffect(() => {
     if (allPolls.length === 0) {
       fetchAllPolls()
@@ -113,7 +133,11 @@ function Home() {
               <p>{poll.pollName}</p>
               <ul>
                 {poll.options.map(option => {
-                  return <li>{`${option.voters.length} - ${option.optionName}`}</li>
+                  return <>
+                    <li>{`${option.voters.length} - ${option.optionName}`}</li>
+                    <button type={'button'} onClick={(ev) => handleVote(ev, poll._id, option.optionName)} >vote</button>
+                  </>
+
                 })}
               </ul>
             </div>
