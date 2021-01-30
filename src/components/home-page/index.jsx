@@ -28,7 +28,7 @@ function Home() {
       .catch(err => console.log(err))
     
     setPollName('')
-    setPollOptions([])
+    setPollOptions(initialData)
   }
 
   const fetchAllPolls = () => {
@@ -44,7 +44,6 @@ function Home() {
     ev.preventDefault();
 
     const newData = {
-      _id: `option-${pollOptions.length}`,
       optionName: '',
       voters: [],
     }
@@ -52,7 +51,7 @@ function Home() {
     const newOptions = [...pollOptions]
 
     newOptions.push(newData)
-    
+
     setPollOptions(newOptions);
   }
 
@@ -80,7 +79,7 @@ function Home() {
     if (allPolls.length === 0) {
       fetchAllPolls()
     }
-  }, [allPolls])
+  }, [])
 
   return (
     <div>
@@ -111,8 +110,11 @@ function Home() {
         {
           allPolls.map(poll => {
             return <div>
+              <p>{poll.pollName}</p>
               <ul>
-                <p>{poll.pollName}</p>
+                {poll.options.map(option => {
+                  return <li>{`${option.voters.length} - ${option.optionName}`}</li>
+                })}
               </ul>
             </div>
           })
