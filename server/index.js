@@ -9,7 +9,7 @@ const cors = require("cors");
 
 const PORT = process.env.PORT || 3001;
 
-const { newPoll, getPolls } = require('./handlers');
+const { newPoll, getPolls, voteOnPoll } = require('./handlers');
 
 express()
   .use(function (req, res, next) {
@@ -35,5 +35,6 @@ express()
   .get('/', (req,res) => res.send('helloFromServer'))
   .get('/api/getpolls', getPolls)
   .post('/api/newpoll', newPoll)
+  .post('/api/votepoll', voteOnPoll)
 
   .listen(PORT, () => console.log(`Listening on PORT ${PORT}`))
