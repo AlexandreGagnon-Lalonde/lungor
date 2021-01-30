@@ -1,7 +1,7 @@
 "use strict"
 
 require("dotenv").config();
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const assert = require("assert");
 const { MONGO_URI } = process.env;
 const options = {
@@ -49,7 +49,44 @@ const getPolls = async (req, res) => {
   }
 }
 
+const voteOnPoll = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  const { _id, optionName } = req.body;
+
+  try {
+    await client.connect();
+
+    const db = client.db('lungor');
+
+    const pollQuery = { _id: ObjectId(`${_id}`) };
+    const poll = await db.collection('polls').findOne(pollQuery);
+
+    poll.options.map(option => {
+      if (option.optionName === optionName) {
+        option.voters.push('1')
+      }
+      return option
+    })
+
+    const pollUpdated = {
+      $set: {
+        options: poll.options
+      }
+    }
+
+    const newPoll = await db.collection('polls').updateOne(pollQuery, pollUpdated)
+    assert.equal(1, newPoll.matchedCount);
+    assert.equal(1, newPoll.modifiedCount);
+
+    res.status(200).json({ status: 200, poll })
+  } catch(err) {
+    res.status(500).json({ status: 500, message: err.message });
+  }
+}
+
 module.exports = {
   newPoll,
   getPolls,
+  voteOnPoll,
 }
