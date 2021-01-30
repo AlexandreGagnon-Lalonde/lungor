@@ -15,7 +15,7 @@ const newPoll = async (req, res) => {
   const { pollOptions, pollName } = req.body;
   const pollBody = {
     pollName,
-    ...pollOptions,
+    options: pollOptions
   };
 
   try {
