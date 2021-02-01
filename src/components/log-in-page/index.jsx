@@ -37,7 +37,7 @@ function LogIn() {
     })
       .then(res => res.json())
       .then(poll => {
-        fetchAllPolls()
+        
       })
       .catch(err => console.log(err))
   }
@@ -47,10 +47,10 @@ function LogIn() {
       {newUser ? (
         <>
           <form onClick={handleSignup}>
-            <input type={"text"} placeholder={"Username"} />
-            <input type={"email"} placeholder={"Email"} />
-            <input type={"password"} placeholder={"Password"} />
-            <input type={"password"} placeholder={"Verify Password"} />
+            <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} />
+            <input onChange={(ev) => setEmail(ev.currentTarget.value)} type={"email"} placeholder={"Email"} />
+            <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} />
+            <input onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} type={"password"} placeholder={"Verify Password"} />
             <button type={"submit"}>Sign Up</button>
           </form>
           <button type={"button"} onClick={handleUserForm}>
@@ -60,8 +60,8 @@ function LogIn() {
       ) : (
         <>
           <form>
-            <input type={"text"} placeholder={"Username"} />
-            <input type={"password"} placeholder={"Password"} />
+            <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} />
+            <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} />
             <button type={"submit"}>Log In</button>
           </form>
           <button type={"button"} onClick={handleUserForm}>
