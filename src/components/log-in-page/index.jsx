@@ -1,7 +1,12 @@
 import React, { useContext, useState } from "react";
+import { SERVER_URL, initialData } from '../../constant';
 
 function LogIn() {
   const [newUser, setNewUser] = useState(false);
+  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const handleUserForm = (ev) => {
     ev.preventDefault();
@@ -13,14 +18,35 @@ function LogIn() {
   }
 
   const handleSignup = () => {
+    ev.preventDefault();
 
+    const user = {
+      username,
+      email,
+      password,
+    }
+
+    fetch(SERVER_URL + `/api/createuser`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user
+      })
+    })
+      .then(res => res.json())
+      .then(poll => {
+        fetchAllPolls()
+      })
+      .catch(err => console.log(err))
   }
-  
+
   return (
     <>
       {newUser ? (
         <>
-          <form>
+          <form onClick={handleSignup}>
             <input type={"text"} placeholder={"Username"} />
             <input type={"email"} placeholder={"Email"} />
             <input type={"password"} placeholder={"Password"} />
