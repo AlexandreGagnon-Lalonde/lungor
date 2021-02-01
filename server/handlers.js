@@ -47,6 +47,7 @@ const getPolls = async (req, res) => {
   } catch(err) {
     res.status(500).json({ status: 500, message: err.message });
   }
+  client.close();
 }
 
 const voteOnPoll = async (req, res) => {
@@ -83,10 +84,38 @@ const voteOnPoll = async (req, res) => {
   } catch(err) {
     res.status(500).json({ status: 500, message: err.message });
   }
+  client.close();
+}
+
+const createUser = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, option);
+
+  const { user } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db('lungor');
+
+    const users = await db.collection('users').find().toArray();
+
+    const userAlreadyExist = users.find(userObj => userObj.username === user.username)
+
+    if (!userAlreadyExist) {
+      const newUser = await db.collection('users').insertOne(user);
+      assert(1, newUser.insertedCount);
+      res.status(201).json({ status: 201, user })
+    } else {
+      res.status(500).json({ status: 500, message: 'This user exist already'})
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message })
+  }
+  client.close();
 }
 
 module.exports = {
   newPoll,
   getPolls,
   voteOnPoll,
+  createUser,
 }
