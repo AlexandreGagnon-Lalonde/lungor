@@ -14,7 +14,12 @@ function LogIn() {
   };
 
   const handleLogin = () => {
+    fetch(SERVER_URL + `/api/getuser/${username}`)
+      .then((res) => res.json())
+      .then((data) => {
 
+      })
+      .catch((err) => console.log(err.message));
   }
 
   const checkPasswordComplexity = (pwd) => {
@@ -58,7 +63,7 @@ function LogIn() {
             setMessage(poll.message)
           }
         })
-        .catch(err => setMessage(err.message))
+        .catch(err => console.log(err.message))
     } else if (passwordCheck && !passwordComplexity) {
       setMessage('Please use a more complex password')
     } else {
