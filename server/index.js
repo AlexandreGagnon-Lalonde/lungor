@@ -37,6 +37,6 @@ express()
   .post('/api/newpoll', newPoll)
   .post('/api/votepoll', voteOnPoll)
 
-  .post('/api/createuser', createuser)
+  .post('/api/createuser', createUser)
 
   .listen(PORT, () => console.log(`Listening on PORT ${PORT}`))

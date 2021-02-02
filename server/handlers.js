@@ -88,7 +88,7 @@ const voteOnPoll = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-  const client = await MongoClient(MONGO_URI, option);
+  const client = await MongoClient(MONGO_URI, options);
 
   const { user } = req.body;
   try {
