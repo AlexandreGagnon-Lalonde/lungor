@@ -17,6 +17,17 @@ function LogIn() {
 
   }
 
+  const checkPasswordComplexity = (pwd) => {
+    const hasUppercase = /[A-Z]/.test(pwd)
+    const hasLowercase = /[a-z]/.test(pwd)
+    const hasNumber = /[\d]/.test(pwd)
+    const hasNonAlpha = /[\W]/.test(pwd)
+
+    const validity = hasLowercase + hasNonAlpha + hasNumber + hasUppercase
+
+    return validity >= 4
+  }
+
   const handleSignup = (ev) => {
     ev.preventDefault();
 
@@ -26,7 +37,10 @@ function LogIn() {
       votes: [],
     }
 
-    if (password === confirmPassword) {
+    const passwordComplexity = checkPasswordComplexity(password)
+    const passwordCheck = password === confirmPassword
+
+    if (passwordCheck && passwordComplexity) {
       fetch(SERVER_URL + `/api/createuser`, {
         method: 'POST',
         headers: {
@@ -45,6 +59,8 @@ function LogIn() {
           }
         })
         .catch(err => setMessage(err.message))
+    } else if (passwordCheck && !passwordComplexity) {
+      setMessage('Please use a more complex password')
     } else {
       setMessage('Please confirm your password')
     }
