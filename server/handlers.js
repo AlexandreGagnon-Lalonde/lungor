@@ -105,7 +105,7 @@ const createUser = async (req, res) => {
       assert(1, newUser.insertedCount);
       res.status(201).json({ status: 201, user })
     } else {
-      res.status(500).json({ status: 500, message: 'This user exist already'})
+      res.status(400).json({ status: 400, message: 'This user already exist'})
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message })

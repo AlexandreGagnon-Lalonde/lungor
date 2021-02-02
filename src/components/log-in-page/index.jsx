@@ -38,9 +38,13 @@ function LogIn() {
       })
         .then(res => res.json())
         .then(poll => {
-          setMessage('')
+          if (poll.status === 201) {
+            setMessage('')
+          } else {
+            setMessage(poll.message)
+          }
         })
-        .catch(err => console.log(err))
+        .catch(err => setMessage(err.message))
     } else {
       setMessage('Please confirm your password')
     }
