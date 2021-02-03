@@ -18,7 +18,7 @@ export default function userReducer(state = initialState, action) {
         userStatus: "in",
       };
     }
-    case "RECEIVE_USER_ERROR": {
+    case "USER_ERROR": {
       return {
         ...state,
         errorMessage: action.errorMessage,
