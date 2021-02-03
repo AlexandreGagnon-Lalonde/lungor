@@ -15,3 +15,21 @@ export const userError = (errorMessage) => ({
 export const userLogout = () => ({
   type: "LOGOUT",
 })
+
+export const requestPolls = () => ({
+  type: "REQUEST_POLLS",
+});
+
+export const receivePolls = (polls) => ({
+  type: "RECEIVE_POLLS",
+  polls,
+});
+
+export const pollError = (errorMessage) => ({
+  type: "POLL_ERROR",
+  errorMessage,
+})
+
+export const votePoll = () => ({
+  type: "VOTE_POLL",
+})
