@@ -113,9 +113,41 @@ const createUser = async (req, res) => {
   client.close();
 }
 
+const getUser = async (req, res) => {
+  const client = await MongoClient(MONGO_URI, options);
+
+  const { username } = req.params;
+  const { password } = req.body;
+  try {
+    await client.connect();
+
+    const db = client.db('lungor');
+
+    const users = await db.collection('users').find().toArray();
+
+    const user = users.find(userObj => userObj.username === username)
+
+    const pwdIsOK = user.password === password;
+    const userExist = user.username === username;
+
+    if (userExist && pwdIsOK) {
+      delete user.password
+      res.status(200).json({ status: 200, user })
+    } else if (userExist) {
+      res.status(400).json({ status: 400, message: 'Wrong Password'})
+    } else {
+      res.status(400).json({ status: 400, message: 'User not found'})
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message })
+  }
+  client.close();
+}
+
 module.exports = {
   newPoll,
   getPolls,
   voteOnPoll,
   createUser,
+  getUser,
 }
