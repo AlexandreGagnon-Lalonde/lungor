@@ -1,7 +1,6 @@
 const initialState = {
   user: null,
-  otherUser: null,
-  status: "idle",
+  userStatus: 'out'
 };
 
 export default function userReducer(state = initialState, action) {
@@ -9,29 +8,28 @@ export default function userReducer(state = initialState, action) {
     case "REQUEST_USER": {
       return {
         ...state,
-        // status: "Loading",
+        userStatus: "loading",
       };
     }
     case "RECEIVE_USER": {
       return {
         ...state,
-        // user: action.user,
-        // status: "Logged In",
+        user: action.user,
+        userStatus: "in",
       };
     }
     case "RECEIVE_USER_ERROR": {
       return {
         ...state,
-        // errorMessage: action.errorMessage,
-        // status: "error",
+        errorMessage: action.errorMessage,
+        userStatus: "error",
       };
     }
     case "LOGOUT": {
       return {
         ...state,
-        // user: null,
-        // otherUser: null,
-        // status: "idle",
+        user: null,
+        userStatus: "out",
       };
     }
     default: {
