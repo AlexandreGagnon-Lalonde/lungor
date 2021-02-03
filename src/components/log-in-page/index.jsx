@@ -1,5 +1,12 @@
 import React, { useContext, useState } from "react";
 import { SERVER_URL, initialData } from '../../constant';
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  requestUser,
+  receiveUser,
+  userError,
+} from "../../reducer/action";
 
 function LogIn() {
   const [newUser, setNewUser] = useState(false);
@@ -8,18 +15,27 @@ function LogIn() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const handleUserForm = (ev) => {
     ev.preventDefault();
     setNewUser(!newUser);
   };
 
   const handleLogin = () => {
+    dispatch(requestUser())
+
     fetch(SERVER_URL + `/api/getuser/${username}`)
       .then((res) => res.json())
       .then((data) => {
-
+        dispatch(receiveUser(data.user))
+        history.push('/home')
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err.message)
+        dispatch(userError(err.message))
+      });
   }
 
   const checkPasswordComplexity = (pwd) => {
@@ -87,7 +103,7 @@ function LogIn() {
         </>
       ) : (
         <>
-          <form>
+          <form onSubmit={handleLogin}>
             <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} />
             <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} />
             <button type={"submit"}>Log In</button>
