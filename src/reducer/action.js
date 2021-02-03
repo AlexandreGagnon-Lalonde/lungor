@@ -7,9 +7,9 @@ export const receiveUser = (user) => ({
   user,
 });
 
-export const userError = (errorMessage) => ({
+export const userError = (message) => ({
   type: "USER_ERROR",
-  errorMessage,
+  message,
 })
 
 export const userLogout = () => ({
@@ -25,9 +25,9 @@ export const receivePolls = (polls) => ({
   polls,
 });
 
-export const pollError = (errorMessage) => ({
+export const pollError = (message) => ({
   type: "POLL_ERROR",
-  errorMessage,
+  message,
 })
 
 export const votePoll = () => ({

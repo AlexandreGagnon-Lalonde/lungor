@@ -9,6 +9,8 @@ import {
 } from "../../reducer/action";
 
 function LogIn() {
+  const userState = useSelector(state => state.user)
+
   const [newUser, setNewUser] = useState(false);
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -23,19 +25,34 @@ function LogIn() {
     setNewUser(!newUser);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (ev) => {
+    ev.preventDefault();
+
     dispatch(requestUser())
 
-    fetch(SERVER_URL + `/api/getuser/${username}`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(receiveUser(data.user))
-        history.push('/home')
+    fetch(SERVER_URL + `/api/getuser/${username}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password
       })
-      .catch((err) => {
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status == 200) {
+          dispatch(receiveUser(data.user))
+          dispatch(userError(''))
+          history.push('/home')
+        } else {
+          dispatch(userError(data.message))
+        }
+      })
+      .catch(err => {
         console.log(err.message)
         dispatch(userError(err.message))
-      });
+      })
   }
 
   const checkPasswordComplexity = (pwd) => {
@@ -114,6 +131,7 @@ function LogIn() {
         </>
       )}
       {message && <p>{message}</p>}
+      {userState.message && <p>{userState.message}</p>}
     </>
   );
 }

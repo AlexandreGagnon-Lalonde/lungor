@@ -1,6 +1,6 @@
 const initialState = {
   user: null,
-  userStatus: 'out'
+  userStatus: 'out',
 };
 
 export default function userReducer(state = initialState, action) {
@@ -21,7 +21,7 @@ export default function userReducer(state = initialState, action) {
     case "USER_ERROR": {
       return {
         ...state,
-        errorMessage: action.errorMessage,
+        message: action.message,
         userStatus: "error",
       };
     }
