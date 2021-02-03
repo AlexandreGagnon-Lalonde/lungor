@@ -6,3 +6,8 @@ export const receiveUser = (user) => ({
   type: "RECEIVE_USER",
   user,
 });
+
+export const userError = (errorMessage) => ({
+  type: "USER_ERROR",
+  errorMessage,
+})
