@@ -1,27 +1,38 @@
 const initialState = {
-  poll: [],
-  status: "idle",
+  polls: [],
+  isVoting: false,
+  status: 'idle',
 };
 
 export default function pollReducer(state = initialState, action) {
   switch (action.type) {
-    case "REQUEST_POLL": {
+    case "REQUEST_POLLS": {
       return {
         ...state,
-        // status: "Loading",
+        status: "loading",
+        isVoting: false,
       };
     }
-    case "RECEIVE_POLL": {
+    case "RECEIVE_POLLS": {
       return {
         ...state,
-        // status: "idle",
-        // POLL: action.POLL,
+        status: "idle",
+        polls: action.polls,
+        isVoting: false,
       };
     }
-    case "RECEIVE_POLL_ERROR": {
+    case "POLL_ERROR": {
       return {
         ...state,
-        // status: "Error",
+        status: "Error",
+        message: action.error,
+        isVoting: false,
+      };
+    }
+    case "VOTE_POLL": {
+      return {
+        ...state,
+        isVoting: true,
       };
     }
     default: {
