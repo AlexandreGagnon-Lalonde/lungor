@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
 import { SERVER_URL, initialData } from '../../constant';
 
 function Home() {
+  const userState = useSelector(state => state.user)
+
   const [pollCreation, setPollCreation] = useState(false);
   const [pollName, setPollName] = useState('');
   const [pollOptions, setPollOptions] = useState(initialData);
@@ -94,7 +96,7 @@ function Home() {
       })
       .catch(err => console.log(err))
   }
-console.log(allPolls)
+
   React.useEffect(() => {
     if (allPolls.length === 0) {
       fetchAllPolls()
@@ -103,6 +105,7 @@ console.log(allPolls)
 
   return (
     <div>
+      {userState && <nav>{userState.user.username}</nav>}
       {pollCreation ? <form onSubmit={handleSubmit}>
         <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
         <label>

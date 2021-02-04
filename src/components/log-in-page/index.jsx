@@ -44,6 +44,7 @@ function LogIn() {
         if (data.status == 200) {
           dispatch(receiveUser(data.user))
           dispatch(userError(''))
+          localStorage.setItem('user', JSON.stringify(data.user))
           history.push('/home')
         } else {
           dispatch(userError(data.message))
@@ -109,9 +110,9 @@ function LogIn() {
       {newUser ? (
         <>
           <form onSubmit={handleSignup}>
-            <input onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} />
-            <input onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} />
-            <input onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} />
+            <input onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
+            <input onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
+            <input onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required />
             <button type={"submit"}>Sign Up</button>
           </form>
           <button type={"button"} onClick={handleUserForm}>
@@ -121,8 +122,8 @@ function LogIn() {
       ) : (
         <>
           <form onSubmit={handleLogin}>
-            <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} />
-            <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} />
+            <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} required />
+            <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} required />
             <button type={"submit"}>Log In</button>
           </form>
           <button type={"button"} onClick={handleUserForm}>

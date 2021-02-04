@@ -127,8 +127,9 @@ const getUser = async (req, res) => {
 
     const user = users.find(userObj => userObj.username === username)
 
-    const pwdIsOK = user.password === password;
-    const userExist = user.username === username;
+    const userExist = user && user.username === username;
+
+    const pwdIsOK = user && user.password === password;
 
     if (userExist && pwdIsOK) {
       delete user.password
