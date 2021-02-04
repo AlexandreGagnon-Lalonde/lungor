@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { SERVER_URL, initialData } from '../../constant';
+import {
+  requestUser,
+  receiveUser,
+  userError,
+  userLogout,
+  receivePolls,
+  requestPolls,
+  pollError,
+  votePoll,
+} from "../../reducer/action";
 
 function Home() {
   const userState = useSelector(state => state.user)
+  const pollState = useSelector(state => state.poll)
 
   const [pollCreation, setPollCreation] = useState(false);
   const [pollName, setPollName] = useState('');
   const [pollOptions, setPollOptions] = useState(initialData);
-  const [allPolls, setAllPolls] = useState([]);
+
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleSubmit = (ev) => {
     ev.preventDefault();
@@ -27,19 +41,27 @@ function Home() {
       .then(poll => {
         fetchAllPolls()
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err.message)
+        dispatch(pollError(err.message))
+      })
     
     setPollName('')
     setPollOptions(initialData)
   }
 
   const fetchAllPolls = () => {
+    dispatch(requestPolls());
+
     fetch(SERVER_URL + `/api/getpolls`)
       .then((res) => res.json())
       .then((data) => {
-        setAllPolls(data.polls)
+        dispatch(receivePolls(data.polls))
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err.message)
+        dispatch(pollError(err.message))
+      })
   }
 
   const addOption = (ev) => {
@@ -97,15 +119,24 @@ function Home() {
       .catch(err => console.log(err))
   }
 
+  const handleLogout = (ev) => {
+    ev.preventDefault();
+
+    dispatch(userLogout());
+    dispatch()
+    history.push('/')
+    localStorage.clear();
+  }
+
   React.useEffect(() => {
-    if (allPolls.length === 0) {
+    if (pollState.polls.length === 0) {
       fetchAllPolls()
     }
   }, [])
 
   return (
     <div>
-      {userState && <nav>{userState.user.username}</nav>}
+      {userState && <div><nav>{userState.user.username}</nav><button onClick={handleLogout}>Leave</button></div>}
       {pollCreation ? <form onSubmit={handleSubmit}>
         <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
         <label>
@@ -131,8 +162,8 @@ function Home() {
       
       <div>
         {
-          allPolls.map(poll => {
-            return <div>
+          pollState.polls.map((poll, index) => {
+            return <div key={index}>
               <p>{poll.pollName}</p>
               <ul>
                 {poll.options.map(option => {

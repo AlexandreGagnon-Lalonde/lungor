@@ -45,7 +45,7 @@ function LogIn() {
           dispatch(receiveUser(data.user))
           dispatch(userError(''))
           localStorage.setItem('user', JSON.stringify(data.user))
-          history.push('/home')
+          history.push('/')
         } else {
           dispatch(userError(data.message))
         }
@@ -93,6 +93,9 @@ function LogIn() {
         .then(poll => {
           if (poll.status === 201) {
             setMessage('')
+            dispatch(receiveUser(poll.user))
+            localStorage.setItem('user', JSON.stringify(poll.user))
+            history.push('/')
           } else {
             setMessage(poll.message)
           }
