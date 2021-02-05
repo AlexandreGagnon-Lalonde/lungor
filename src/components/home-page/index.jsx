@@ -101,13 +101,14 @@ function Home() {
 
   const handleVote = (ev, _id, optionName) => {
     ev.preventDefault();
-
+console.log(userState.user)
     fetch(SERVER_URL + `/api/votepoll`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        user: userState.user,
         optionName,
         _id,
       })
@@ -171,7 +172,6 @@ function Home() {
                     <li>{`${option.voters.length} - ${option.optionName}`}</li>
                     <button type={'button'} onClick={(ev) => handleVote(ev, poll._id, option.optionName)} >vote</button>
                   </>
-
                 })}
               </ul>
             </div>
