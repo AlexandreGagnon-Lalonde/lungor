@@ -10,3 +10,11 @@ export const initialData = [
     voters: [],
   },
 ];
+
+export const COLOR = {
+  red: '#EA526F',
+  pink: '#E76B74',
+  sand: '#D7AF70',
+  wood: '#937D64',
+  rock: '#585B56',
+}
