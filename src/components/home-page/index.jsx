@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { SERVER_URL, initialData } from '../../constant';
 import {
   requestUser,
@@ -101,7 +101,7 @@ function Home() {
 
   const handleVote = (ev, _id, optionName) => {
     ev.preventDefault();
-console.log(userState.user)
+
     fetch(SERVER_URL + `/api/votepoll`, {
       method: 'POST',
       headers: {
@@ -124,8 +124,9 @@ console.log(userState.user)
     ev.preventDefault();
 
     dispatch(userLogout());
-    dispatch()
+
     history.push('/')
+
     localStorage.clear();
   }
 
@@ -165,7 +166,7 @@ console.log(userState.user)
         {
           pollState.polls.map((poll, index) => {
             return <div key={index}>
-              <p>{poll.pollName}</p>
+              <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
               <ul>
                 {poll.options.map(option => {
                   return <>
