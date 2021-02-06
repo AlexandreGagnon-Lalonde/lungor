@@ -35,10 +35,10 @@ function App() {
           <Route exact path={"/"}>
             <Home />
           </Route>
-          <Route path={"/poll/:pollid"}>
+          <Route path={"/poll/:pollId"}>
             <Poll />
           </Route>
-          <Route path={"/user/:userid"}>
+          <Route path={"/user/:userId"}>
             <User />
           </Route>
         </>

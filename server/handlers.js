@@ -54,7 +54,6 @@ const voteOnPoll = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   const { _id, optionName, user } = req.body;
-
   try {
     await client.connect();
 
@@ -68,13 +67,11 @@ const voteOnPoll = async (req, res) => {
 
     poll.options.map(option => {
       if (option.optionName === optionName && !option.voters.find(voter => voter === user.username)) {
-        console.log('in')
         option.voters.push(user.username)
       } else if (option.voters.find(voter => voter === user.username)) {
         const indexOfUser = option.voters.indexOf(currentUser.username)
         option.voters.splice(indexOfUser, 1)
       } else {
-        console.log('nul')
         return option
       }
     })
@@ -98,9 +95,12 @@ const voteOnPoll = async (req, res) => {
     assert.equal(1, newPoll.matchedCount);
     assert.equal(1, newPoll.modifiedCount);
 
-    const newUser = await db.collection('users').updateOne(userQuery, userUpdated)
-    assert.equal(1, newUser.matchedCount);
-    assert.equal(1, newUser.modifiedCount);
+
+    if (!currentUser.votes.find(poll => poll === _id)) {
+      const newUser = await db.collection('users').updateOne(userQuery, userUpdated)
+        assert.equal(1, newUser.matchedCount);
+        assert.equal(1, newUser.modifiedCount);
+    }
 
     res.status(200).json({ status: 200, poll })
   } catch(err) {
