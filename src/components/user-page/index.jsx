@@ -1,7 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useParams, Link } from "react-router-dom";
+import { SERVER_URL, initialData } from "../../constant";
+import {
+  requestUser,
+  receiveUser,
+  userError,
+  userLogout,
+  receivePolls,
+  requestPolls,
+  pollError,
+  votePoll,
+} from "../../reducer/action";
 
 function User() {
-  return <div>User</div>;
+  const userState = useSelector((state) => state.user);
+
+  return (
+    <>
+      <div>
+        <Link to={`/`}>Back To Voting</Link>
+      </div>
+      {userState.user.polls ? (
+        <div>
+          {userState.user.polls.map((poll) => {
+            return <p>{poll.pollName}</p>;
+          })}
+        </div>
+      ) : <p>you didn't vote yet</p>}
+    </>
+  );
 }
 
 export default User;
