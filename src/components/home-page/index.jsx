@@ -138,7 +138,7 @@ function Home() {
 
   return (
     <div>
-      {userState && <div><nav>{userState.user.username}</nav><button onClick={handleLogout}>Leave</button></div>}
+      {userState && <div><Link to={`/user/${userState.user._id}`} >{userState.user.username}</Link><button onClick={handleLogout}>Leave</button></div>}
       {pollCreation ? <form onSubmit={handleSubmit}>
         <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
         <label>
