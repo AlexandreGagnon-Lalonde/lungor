@@ -2,11 +2,15 @@ export const SERVER_URL = "http://localhost:3001";
 
 export const initialData = [
   {
-    optionName: "",
+    title: "",
+    value: 0,
+    color: '',
     voters: [],
   },
   {
-    optionName: "",
+    title: "",
+    value: 0,
+    color: '',
     voters: [],
   },
 ];
