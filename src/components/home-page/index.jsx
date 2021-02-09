@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
+import { PieChart } from 'react-minimal-pie-chart';
 import { SERVER_URL, initialData } from '../../constant';
 import {
   requestUser,
@@ -56,6 +57,7 @@ function Home() {
     fetch(SERVER_URL + `/api/getpolls`)
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         dispatch(receivePolls(data.polls))
       })
       .catch(err => {
@@ -68,7 +70,9 @@ function Home() {
     ev.preventDefault();
 
     const newData = {
-      optionName: '',
+      title: "",
+      value: 0,
+      color: '',
       voters: [],
     }
 
@@ -94,12 +98,12 @@ function Home() {
   const updateOptionName = (ev, index) => {
     const updatedOptions = [...pollOptions]
 
-    updatedOptions[index].optionName = ev.currentTarget.value
+    updatedOptions[index].title = ev.currentTarget.value
 
     setPollOptions(updatedOptions)
   }
 
-  const handleVote = (ev, _id, optionName) => {
+  const handleVote = (ev, _id, title) => {
     ev.preventDefault();
 
     fetch(SERVER_URL + `/api/votepoll`, {
@@ -109,7 +113,7 @@ function Home() {
       },
       body: JSON.stringify({
         user: userState.user,
-        optionName,
+        title,
         _id,
       })
     })
@@ -150,7 +154,7 @@ function Home() {
             pollOptions.map((option, index) => {
               return <>
                 <label>
-                  <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].optionName} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
+                  <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
                   {(pollOptions.length > 2) && <button type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >-</button>}
                 </label>
                 {(index === pollOptions.length - 1 && pollOptions.length < 5) && <button type={'button'} onClick={(ev) => addOption(ev)} >+</button>}
@@ -165,16 +169,18 @@ function Home() {
       <div>
         {
           pollState.polls.map((poll, index) => {
+            console.log(poll)
             return <div key={index}>
               <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
               <ul>
                 {poll.options.map(option => {
                   return <>
-                    <li>{`${option.voters.length} - ${option.optionName}`}</li>
-                    <button type={'button'} onClick={(ev) => handleVote(ev, poll._id, option.optionName)} >vote</button>
+                    <li>{`${option.voters.length} - ${option.title}`}</li>
+                    <button type={'button'} onClick={(ev) => handleVote(ev, poll._id, option.title)} >vote</button>
                   </>
                 })}
               </ul>
+              <PieChart data={poll.options} />
             </div>
           })
         }
