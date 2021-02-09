@@ -15,16 +15,16 @@ import {
 
 function User() {
   const userState = useSelector((state) => state.user);
-
+console.log(userState)
   return (
     <>
       <div>
         <Link to={`/`}>Back To Voting</Link>
       </div>
-      {userState.user.polls ? (
+      {userState.user.votes ? (
         <div>
-          {userState.user.polls.map((poll) => {
-            return <p>{poll.pollName}</p>;
+          {userState.user.votes.map((poll) => {
+            return <p>{poll}</p>;
           })}
         </div>
       ) : <p>you didn't vote yet</p>}
