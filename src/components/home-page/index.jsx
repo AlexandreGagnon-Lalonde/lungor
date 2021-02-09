@@ -180,7 +180,7 @@ function Home() {
                   </>
                 })}
               </ul>
-              <PieChart data={poll.options} style={{ width: '200px'}} />
+              <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} />
             </div>
           })
         }
