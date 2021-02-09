@@ -180,7 +180,7 @@ function Home() {
                   </>
                 })}
               </ul>
-              <PieChart data={poll.options} />
+              <PieChart data={poll.options} style={{ width: '200px'}} />
             </div>
           })
         }

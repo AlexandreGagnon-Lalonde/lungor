@@ -65,18 +65,22 @@ const voteOnPoll = async (req, res) => {
     const poll = await db.collection('polls').findOne(pollQuery);
     const currentUser = await db.collection('users').findOne(userQuery);
 
+    const didUserVoteOnPoll = currentUser.votes.find(poll => poll === _id)
+
     poll.options.map(option => {
       if (option.title === title && !option.voters.find(voter => voter === user.username)) {
         option.voters.push(user.username)
+        option.value += 1;
       } else if (option.voters.find(voter => voter === user.username)) {
         const indexOfUser = option.voters.indexOf(currentUser.username)
         option.voters.splice(indexOfUser, 1)
+        option.value -= 1;
       } else {
         return option
       }
     })
 
-    if (!currentUser.votes.find(poll => poll === _id)) {
+    if (!didUserVoteOnPoll) {
       currentUser.votes.push(_id)
     }
 
@@ -95,8 +99,7 @@ const voteOnPoll = async (req, res) => {
     assert.equal(1, newPoll.matchedCount);
     assert.equal(1, newPoll.modifiedCount);
 
-
-    if (!currentUser.votes.find(poll => poll === _id)) {
+    if (!didUserVoteOnPoll) {
       const newUser = await db.collection('users').updateOne(userQuery, userUpdated)
         assert.equal(1, newUser.matchedCount);
         assert.equal(1, newUser.modifiedCount);
