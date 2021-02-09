@@ -15,7 +15,8 @@ import {
 
 function User() {
   const userState = useSelector((state) => state.user);
-console.log(userState)
+  const pollState = useSelector((state) => state.poll);
+
   return (
     <>
       <div>
@@ -23,11 +24,17 @@ console.log(userState)
       </div>
       {userState.user.votes ? (
         <div>
-          {userState.user.votes.map((poll) => {
-            return <p>{poll}</p>;
+          {userState.user.votes.map((userPoll) => {
+            return (
+              <Link to={`/poll/${userPoll}`}>
+                {pollState.polls.find((poll) => poll._id === userPoll).pollName}
+              </Link>
+            );
           })}
         </div>
-      ) : <p>you didn't vote yet</p>}
+      ) : (
+        <p>you didn't vote yet</p>
+      )}
     </>
   );
 }
