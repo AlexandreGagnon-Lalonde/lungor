@@ -53,7 +53,7 @@ const getPolls = async (req, res) => {
 const voteOnPoll = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
-  const { _id, optionName, user } = req.body;
+  const { _id, title, user } = req.body;
   try {
     await client.connect();
 
@@ -66,7 +66,7 @@ const voteOnPoll = async (req, res) => {
     const currentUser = await db.collection('users').findOne(userQuery);
 
     poll.options.map(option => {
-      if (option.optionName === optionName && !option.voters.find(voter => voter === user.username)) {
+      if (option.title === title && !option.voters.find(voter => voter === user.username)) {
         option.voters.push(user.username)
       } else if (option.voters.find(voter => voter === user.username)) {
         const indexOfUser = option.voters.indexOf(currentUser.username)
