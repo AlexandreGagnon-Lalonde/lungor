@@ -170,17 +170,17 @@ function Home() {
         {
           pollState.polls.map((poll, index) => {
             console.log(poll)
-            return <div key={index}>
+            return <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', border: '1px solid red' }}>
               <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
+              <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} />
+
               <ul>
                 {poll.options.map(option => {
                   return <>
-                    <li>{`${option.voters.length} - ${option.title}`}</li>
-                    <button type={'button'} onClick={(ev) => handleVote(ev, poll._id, option.title)} >vote</button>
+                    <li onClick={(ev) => handleVote(ev, poll._id, option.title)} >{`${option.voters.length} - ${option.title}`}</li>
                   </>
                 })}
               </ul>
-              <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} />
             </div>
           })
         }
