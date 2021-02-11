@@ -47,9 +47,23 @@ function Home() {
         console.log(err.message)
         dispatch(pollError(err.message))
       })
-    
+
     setPollName('')
-    setPollOptions(initialData)
+    setPollOptions([
+      {
+        title: "",
+        value: 0,
+        color: '',
+        voters: [],
+      },
+      {
+        title: "",
+        value: 0,
+        color: '',
+        voters: [],
+      },
+    ])
+    setPollCreation(false)
   }
 
   const fetchAllPolls = () => {
@@ -144,7 +158,7 @@ function Home() {
 
     pollData.options.map((option, index) => {
       const indexValue = colorOrder.findIndex(x => x.title === option.title)
-      
+
       option.color = COLOR.RED_GRADIENT[indexValue]
 
       if (option.voters.find(voter => voter === userState.user.username)) {
