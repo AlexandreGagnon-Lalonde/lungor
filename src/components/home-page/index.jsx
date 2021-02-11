@@ -13,6 +13,7 @@ import {
   pollError,
   votePoll,
 } from "../../reducer/action";
+import { COLOR } from '../../constant'
 
 function Home() {
   const userState = useSelector(state => state.user)
@@ -134,6 +135,24 @@ function Home() {
     localStorage.clear();
   }
 
+  const handleColorChange = (pollData) => {
+    const colorOrder = [];
+
+    pollData.options.forEach(option => colorOrder.push({value: option.value, title: option.title}))
+
+    colorOrder.sort((a,b) => a.value > b.value ? 1: -1)
+
+    pollData.options.map((option, index) => {
+      const indexValue = colorOrder.findIndex(x => x.title === option.title)
+      
+      option.color = COLOR.RED_GRADIENT[indexValue]
+
+      if (option.voters.find(voter => voter === userState.user.username)) {
+        option.color = COLOR.GREEN
+      }
+    })
+  }
+
   React.useEffect(() => {
     if (pollState.polls.length === 0) {
       fetchAllPolls()
@@ -169,7 +188,7 @@ function Home() {
       <div>
         {
           pollState.polls.map((poll, index) => {
-            console.log(poll)
+            handleColorChange(poll);
             return <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', border: '1px solid red' }}>
               <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
               <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} />
