@@ -16,9 +16,15 @@ export const initialData = [
 ];
 
 export const COLOR = {
-  red: '#EA526F',
-  pink: '#E76B74',
-  sand: '#D7AF70',
-  wood: '#937D64',
-  rock: '#585B56',
+  GREEN: '#16B698',
+  SAND: '#D7AF70',
+  WOOD: '#937D64',
+  ROCK: '#585B56',
+  RED_GRADIENT: [
+    '#ED6E85',
+    '#E94967',
+    '#E42548',
+    '#C81939',
+    '#A3142E'
+  ]
 }
