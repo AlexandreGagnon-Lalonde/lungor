@@ -210,7 +210,7 @@ function Home() {
               <ul>
                 {poll.options.map(option => {
                   return <>
-                    <li onClick={(ev) => handleVote(ev, poll._id, option.title)} >{`${option.voters.length} - ${option.title}`}</li>
+                    <li onClick={(ev) => handleVote(ev, poll._id, option.title)} ><p style={{ background: `${option.color}`}}>{option.voters.length}</p> {option.title}</li>
                   </>
                 })}
               </ul>
