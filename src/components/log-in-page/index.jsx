@@ -2,11 +2,13 @@ import React, { useContext, useState } from "react";
 import { SERVER_URL, initialData } from '../../constant';
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import styled from "styled-components";
 import {
   requestUser,
   receiveUser,
   userError,
 } from "../../reducer/action";
+import { COLOR } from '../../constant';
 
 function LogIn() {
   const userState = useSelector(state => state.user)
@@ -109,35 +111,92 @@ function LogIn() {
   }
 
   return (
-    <>
+    <LogInContainer>
       {newUser ? (
-        <>
+        <FormContainer>
           <form onSubmit={handleSignup}>
-            <input onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
-            <input onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
-            <input onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required />
-            <button type={"submit"}>Sign Up</button>
+            <InputContainer>
+              <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
+              <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
+              <LogInInput onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required />
+            </InputContainer>
+            <LogInButton type={"submit"}>Sign Up</LogInButton>
           </form>
-          <button type={"button"} onClick={handleUserForm}>
+          <ChangeFormButton type={"button"} onClick={handleUserForm}>
             already a member?
-          </button>
-        </>
+          </ChangeFormButton>
+        </FormContainer>
       ) : (
-        <>
+        <FormContainer>
           <form onSubmit={handleLogin}>
-            <input onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} required />
-            <input onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} required />
-            <button type={"submit"}>Log In</button>
+            <InputContainer>
+              <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} required />
+              <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} required />
+            </InputContainer>
+            <LogInButton type={"submit"}>Log In</LogInButton>
           </form>
-          <button type={"button"} onClick={handleUserForm}>
-            new member?
-          </button>
-        </>
+          <ChangeFormButton type={"button"} onClick={handleUserForm}>
+            First Time Here ?
+          </ChangeFormButton>
+        </FormContainer>
       )}
       {message && <p>{message}</p>}
       {userState.message && <p>{userState.message}</p>}
-    </>
+    </LogInContainer>
   );
 }
 
 export default LogIn;
+
+const LogInContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  padding-bottom: 100px;
+
+`
+const FormContainer = styled.form`
+  width: 350px;
+  height: 400px;
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+`
+const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
+const LogInInput = styled.input`
+  background: ${COLOR.WOOD};
+  outline: none;
+  border: none;
+  color: ${COLOR.SAND};
+  height: 50px;
+  width: 250px;
+  text-align: center;
+  font-weight: bold;
+
+  &::placeholder {
+    color: ${COLOR.SAND};
+  }
+`
+const LogInButton = styled.button`
+  height: 50px;
+  width: 100%;
+`
+const ChangeFormButton = styled.button`
+  background-color: ${COLOR.SAND};
+  border: none;
+  color: ${COLOR.ROCK};
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`

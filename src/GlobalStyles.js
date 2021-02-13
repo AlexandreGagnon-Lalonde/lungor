@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { COLOR } from './constant';
 
 export default createGlobalStyle`
   *,
@@ -15,6 +16,7 @@ export default createGlobalStyle`
   }
   html, body {
     max-width: 100vw;
+    background: ${COLOR.SAND};
   }
   /* http://meyerweb.com/eric/tools/css/reset/
       v2.0 | 20110126

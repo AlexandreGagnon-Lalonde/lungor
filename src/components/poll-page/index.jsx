@@ -91,8 +91,6 @@ function Poll() {
   }
 
   handleColorChange(currentPoll)
-  console.log(pollState.polls.find(poll => poll._id === pollId))
-
   return <>
     <div>
       <Link to={`/`}>Back To Voting</Link>
@@ -100,15 +98,14 @@ function Poll() {
       {userState && <button onClick={handleLogout}>Leave</button>}
     </div>
     <div>
-    <PieChart data={currentPoll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, currentPoll._id, currentPoll.options[index].title)} startAngle={270} lineWidth={35} />
-    <ul>
-                {currentPoll.options.map(option => {
-                  return <>
-                    <li onClick={(ev) => handleVote(ev, currentPoll._id, option.title)} ><p style={{ background: `${option.color}`}}>{option.voters.length}</p> {option.title}</li>
-                  </>
-                })}
-              </ul>
-
+      <PieChart data={currentPoll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, currentPoll._id, currentPoll.options[index].title)} startAngle={270} lineWidth={35} />
+      <ul>
+        {currentPoll.options.map(option => {
+          return (<>
+              <li onClick={(ev) => handleVote(ev, currentPoll._id, option.title)} ><p style={{ background: `${option.color}`}}>{option.voters.length}</p> {option.title}</li>
+            </>)
+        })}
+      </ul>
     </div>
   </>;
 }
