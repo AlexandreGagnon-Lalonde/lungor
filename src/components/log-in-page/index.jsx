@@ -9,6 +9,8 @@ import {
   userError,
 } from "../../reducer/action";
 import { COLOR } from '../../constant';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
 
 function LogIn() {
   const userState = useSelector(state => state.user)
@@ -116,22 +118,25 @@ function LogIn() {
         <FormContainer>
           <form onSubmit={handleSignup}>
             <InputContainer>
-              <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
+            <StyledField label={'Username'} onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} variant={'outlined'} required />
+            <StyledField label={'Password'} onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} variant={'outlined'} required />
+            <StyledField label={'Confirm Password'} onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} variant={'outlined'} required />
+              {/* <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
               <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
-              <LogInInput onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required />
+              <LogInInput onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required /> */}
             </InputContainer>
             <LogInButton type={"submit"}>Sign Up</LogInButton>
           </form>
           <ChangeFormButton type={"button"} onClick={handleUserForm}>
-            already a member?
+            Already a member?
           </ChangeFormButton>
         </FormContainer>
       ) : (
         <FormContainer>
           <form onSubmit={handleLogin}>
             <InputContainer>
-              <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} placeholder={"Username"} required />
-              <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} placeholder={"Password"} required />
+              <StyledField onChange={(ev) => setUsername(ev.currentTarget.value)} type={"text"} variant={'outlined'} label={'Username'} required />
+              <StyledField onChange={(ev) => setPassword(ev.currentTarget.value)} type={"password"} variant={'outlined'} label={'Password'} required />
             </InputContainer>
             <LogInButton type={"submit"}>Log In</LogInButton>
           </form>
@@ -156,39 +161,77 @@ const LogInContainer = styled.div`
   height: 100vh;
   width: 100vw;
   padding-bottom: 100px;
-
 `
 const FormContainer = styled.form`
   width: 350px;
   height: 400px;
-  border: 1px solid red;
+  background: ${COLOR.SAND};
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  border-radius: 5px;
 `
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 `
+const StyledField = withStyles({
+  root: {
+    marginBottom: '10px',
+    color: `${COLOR.ROCK}`,
+    '& label.Mui-focused': {
+      color: `${COLOR.ROCK}`,
+      fontWeight: 'bold',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: `${COLOR.ROCK}`,
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: `${COLOR.ROCK}`,
+      },
+      '&:hover fieldset': {
+        borderColor: `${COLOR.ROCK}`,
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: `${COLOR.ROCK}`,
+      },
+    },
+  },
+  label: {
+    textTransform: 'capitalize',
+  },
+})(TextField)
 const LogInInput = styled.input`
   background: ${COLOR.WOOD};
   outline: none;
-  border: none;
+  border: 1px solid ${COLOR.ROCK};
   color: ${COLOR.SAND};
   height: 50px;
   width: 250px;
   text-align: center;
   font-weight: bold;
+  margin-bottom: 5px;
 
   &::placeholder {
     color: ${COLOR.SAND};
   }
 `
 const LogInButton = styled.button`
-  height: 50px;
+  height: 30px;
   width: 100%;
+  color: ${COLOR.SAND};
+  background: ${COLOR.ROCK};
+  border: 1px solid ${COLOR.WOOD};
+  border-radius: 5px;
+  transition: all 0.1s;
+  cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+  }
 `
 const ChangeFormButton = styled.button`
   background-color: ${COLOR.SAND};
