@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { SERVER_URL, initialData } from '../../constant';
+import React, { useState } from "react";
+import { SERVER_URL } from '../../constant';
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -124,9 +124,6 @@ function LogIn() {
               <StyledField label={'Username'} onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} variant={'outlined'} required />
               <StyledField label={'Password'} type={'password'} onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} variant={'outlined'} required />
               <StyledField label={'Confirm Password'} type={'password'} onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} variant={'outlined'} required />
-              {/* <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
-              <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
-              <LogInInput onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required /> */}
             </InputContainer>
             <LogInButton type={"submit"}>Sign Up</LogInButton>
           </form>
@@ -203,22 +200,6 @@ const StyledField = withStyles({
     },
   },
 })(TextField)
-
-const LogInInput = styled.input`
-  background: ${COLOR.WOOD};
-  outline: none;
-  border: 1px solid ${COLOR.ROCK};
-  color: ${COLOR.SAND};
-  height: 50px;
-  width: 250px;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 5px;
-
-  &::placeholder {
-    color: ${COLOR.SAND};
-  }
-`
 const LogInButton = styled.button`
   height: 30px;
   width: 100%;
