@@ -27,6 +27,9 @@ function LogIn() {
   const handleUserForm = (ev) => {
     ev.preventDefault();
     setNewUser(!newUser);
+    setPassword('');
+    setUsername('');
+    setConfirmPassword('');
   };
 
   const handleLogin = (ev) => {
@@ -118,9 +121,9 @@ function LogIn() {
         <FormContainer>
           <form onSubmit={handleSignup}>
             <InputContainer>
-            <StyledField label={'Username'} onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} variant={'outlined'} required />
-            <StyledField label={'Password'} onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} variant={'outlined'} required />
-            <StyledField label={'Confirm Password'} onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} variant={'outlined'} required />
+              <StyledField label={'Username'} onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} variant={'outlined'} required />
+              <StyledField label={'Password'} type={'password'} onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} variant={'outlined'} required />
+              <StyledField label={'Confirm Password'} type={'password'} onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} variant={'outlined'} required />
               {/* <LogInInput onChange={(ev) => setUsername(ev.currentTarget.value)} value={username} type={"text"} placeholder={"Username"} required />
               <LogInInput onChange={(ev) => setPassword(ev.currentTarget.value)} value={password} type={"password"} placeholder={"Password"} required />
               <LogInInput onChange={(ev) => setConfirmPassword(ev.currentTarget.value)} value={confirmPassword} type={"password"} placeholder={"Verify Password"} required /> */}
@@ -162,7 +165,7 @@ const LogInContainer = styled.div`
   width: 100vw;
   padding-bottom: 100px;
 `
-const FormContainer = styled.form`
+const FormContainer = styled.div`
   width: 350px;
   height: 400px;
   background: ${COLOR.SAND};
@@ -180,7 +183,6 @@ const InputContainer = styled.div`
 const StyledField = withStyles({
   root: {
     marginBottom: '10px',
-    color: `${COLOR.ROCK}`,
     '& label.Mui-focused': {
       color: `${COLOR.ROCK}`,
       fontWeight: 'bold',
@@ -200,10 +202,8 @@ const StyledField = withStyles({
       },
     },
   },
-  label: {
-    textTransform: 'capitalize',
-  },
 })(TextField)
+
 const LogInInput = styled.input`
   background: ${COLOR.WOOD};
   outline: none;
