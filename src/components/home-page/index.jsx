@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { PieChart } from 'react-minimal-pie-chart';
-import { SERVER_URL, initialData } from '../../constant';
+import styled from "styled-components";
+import { SERVER_URL, initialData, COLOR } from '../../constant';
 import {
   requestUser,
   receiveUser,
@@ -13,7 +14,6 @@ import {
   pollError,
   votePoll,
 } from "../../reducer/action";
-import { COLOR } from '../../constant'
 
 function Home() {
   const userState = useSelector(state => state.user)
@@ -175,7 +175,7 @@ function Home() {
 
   return (
     <div>
-      {userState && <div><Link to={`/user/${userState.user._id}`} >{userState.user.username}</Link><button onClick={handleLogout}>Leave</button></div>}
+      {userState && <NavContainer><ProfileLink to={`/user/${userState.user._id}`} >{userState.user.username}</ProfileLink><LogOutButton onClick={handleLogout}>Adiós</LogOutButton></NavContainer>}
       {pollCreation ? <form onSubmit={handleSubmit}>
         <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
         <label>
@@ -223,3 +223,30 @@ function Home() {
 }
 
 export default Home;
+
+const NavContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`
+const ProfileLink = styled(Link)`
+  color: ${COLOR.SAND};
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 10px;
+`
+const LogOutButton = styled.button`
+  background-color: ${COLOR.ROCK};
+  border: 2px solid ${COLOR.WOOD};
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px;
+  color: ${COLOR.SAND};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${COLOR.SAND};
+    border: 2px solid ${COLOR.SAND};
+    color: ${COLOR.ROCK};
+  }
+`
