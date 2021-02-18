@@ -202,10 +202,14 @@ function Home() {
       <div>
         {
           pollState.polls.map((poll, index) => {
+            let amountOfVotes = 0;
+            poll.options.forEach(votes => {
+              amountOfVotes += votes.voters.length
+            })
             handleColorChange(poll);
             return <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', border: '1px solid red' }}>
               <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
-              <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} />
+              {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
 
               <ul>
                 {poll.options.map(option => {
@@ -233,7 +237,12 @@ const ProfileLink = styled(Link)`
   color: ${COLOR.SAND};
   text-transform: uppercase;
   font-weight: bold;
-  margin-right: 10px;
+  padding: 5px 10px;
+
+  &:hover {
+    background-color: ${COLOR.LIGHTROCK};
+    border-radius: 5px;
+  }
 `
 const LogOutButton = styled.button`
   background-color: ${COLOR.ROCK};
