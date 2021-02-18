@@ -20,6 +20,7 @@ export const COLOR = {
   SAND: '#D7AF70',
   WOOD: '#937D64',
   ROCK: '#585B56',
+  LIGHTROCK: '#70746D',
   RED_GRADIENT: [
     '#ED6E85',
     '#E94967',
