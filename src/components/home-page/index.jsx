@@ -209,12 +209,15 @@ function Home() {
             handleColorChange(poll);
             return <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', border: '1px solid red' }}>
               <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
-              {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '200px'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
+              {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '200px', margin: '10px 0'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
 
               <ul>
                 {poll.options.map(option => {
                   return <>
-                    <li onClick={(ev) => handleVote(ev, poll._id, option.title)} ><p style={{ background: `${option.color}`}}>{option.voters.length}</p> {option.title}</li>
+                    <PollIndicatorContainer onClick={(ev) => handleVote(ev, poll._id, option.title)} >
+                      <PollColorIndicator style={{ background: `${option.color}`}}>{option.voters.length}</PollColorIndicator>
+                      {option.title}
+                    </PollIndicatorContainer>
                   </>
                 })}
               </ul>
@@ -257,5 +260,31 @@ const LogOutButton = styled.button`
     background-color: ${COLOR.SAND};
     border: 2px solid ${COLOR.SAND};
     color: ${COLOR.ROCK};
+  }
+`
+const PollColorIndicator = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  color: black;
+`
+const PollIndicatorContainer = styled.li`
+  display: flex;
+  margin-top: 10px;
+  transform: translatey(-5px);
+  cursor: pointer;
+  font-weight: bold;
+  color: ${COLOR.SAND};
+
+  &:hover {
+    color: ${COLOR.WOOD};
+
+    ${PollColorIndicator} {
+      color: black;
+    }
   }
 `
