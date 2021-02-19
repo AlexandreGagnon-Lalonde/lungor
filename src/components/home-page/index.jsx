@@ -207,21 +207,23 @@ function Home() {
               amountOfVotes += votes.voters.length
             })
             handleColorChange(poll);
-            return <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', border: '1px solid red' }}>
-              <Link to={`/poll/${poll._id}`}>{poll.pollName}</Link>
-              {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '200px', margin: '10px 0'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
-
-              <ul>
-                {poll.options.map(option => {
-                  return <>
-                    <PollIndicatorContainer onClick={(ev) => handleVote(ev, poll._id, option.title)} >
-                      <PollColorIndicator style={{ background: `${option.color}`}}>{option.voters.length}</PollColorIndicator>
-                      {option.title}
-                    </PollIndicatorContainer>
-                  </>
-                })}
-              </ul>
-            </div>
+            return <PollContainer key={index} >
+              <PollName to={`/poll/${poll._id}`}>{poll.pollName}</PollName>
+              <PollDataContainer>
+                {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '100px', margin: '10px 0', padding: '0px 50px', flex: '3'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
+  
+                <PollChoices>
+                  {poll.options.map(option => {
+                    return <>
+                      <PollIndicatorContainer onClick={(ev) => handleVote(ev, poll._id, option.title)} >
+                        <PollColorIndicator style={{ background: `${option.color}`}}>{option.voters.length}</PollColorIndicator>
+                        {option.title}
+                      </PollIndicatorContainer>
+                    </>
+                  })}
+                </PollChoices>
+              </PollDataContainer>
+            </PollContainer>
           })
         }
       </div>
@@ -278,13 +280,42 @@ const PollIndicatorContainer = styled.li`
   transform: translatey(-5px);
   cursor: pointer;
   font-weight: bold;
-  color: ${COLOR.SAND};
+  color: black;
 
   &:hover {
-    color: ${COLOR.WOOD};
+    color: ${COLOR.SAND};
 
     ${PollColorIndicator} {
       color: black;
     }
   }
+`
+const PollContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: ${COLOR.WOOD};
+  margin-bottom: 20px;
+  text-align: center;
+`
+const PollName = styled(Link)`
+  margin: 5px;
+  width: 100px;
+  color: black;
+  border-radius: 5px;
+
+  &:hover {
+    background-color: ${COLOR.SAND};
+    opacity: 0.5;
+  }
+`
+const PollDataContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+`
+const PollChoices = styled.ul`
+  flex: 2;
 `
