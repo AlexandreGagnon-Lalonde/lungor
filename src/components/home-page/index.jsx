@@ -22,6 +22,7 @@ function Home() {
   const [pollCreation, setPollCreation] = useState(false);
   const [pollName, setPollName] = useState('');
   const [pollOptions, setPollOptions] = useState(initialData);
+  const [hover, setHover] = useState({pollName: '', index: -1})
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -167,6 +168,10 @@ function Home() {
     })
   }
 
+  const handleMouseHover = (index) => {
+    setHover(index)
+  }
+console.log(hover)
   React.useEffect(() => {
     if (pollState.polls.length === 0) {
       fetchAllPolls()
@@ -203,14 +208,20 @@ function Home() {
         {
           pollState.polls.map((poll, index) => {
             let amountOfVotes = 0;
-            poll.options.forEach(votes => {
-              amountOfVotes += votes.voters.length
-            })
+            
             handleColorChange(poll);
+
+            poll.options.forEach((votes, index) => {
+              amountOfVotes += votes.voters.length
+              if (hover.index === index && poll.pollName === hover.pollName) {
+                poll.options[index] = { ...votes, color: `${COLOR.SAND}`}
+              }
+            })
+
             return <PollContainer key={index} >
               <PollName to={`/poll/${poll._id}`}>{poll.pollName}</PollName>
               <PollDataContainer>
-                {amountOfVotes > 0 ? <PieChart data={poll.options} style={{ width: '100px', margin: '10px 0', padding: '0px 50px', flex: '3'}} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
+                {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '100px', margin: '10px 0', padding: '0px 50px', flex: '3' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
   
                 <PollChoices>
                   {poll.options.map(option => {
@@ -301,13 +312,16 @@ const PollContainer = styled.div`
 `
 const PollName = styled(Link)`
   margin: 5px;
-  width: 100px;
+  width: auto;
+  padding: 5px 20px;
   color: black;
   border-radius: 5px;
+  font-weight: bold;
+  font-size: 1.4em;
 
   &:hover {
     background-color: ${COLOR.SAND};
-    opacity: 0.5;
+    
   }
 `
 const PollDataContainer = styled.div`
@@ -315,6 +329,7 @@ const PollDataContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  padding-bottom: 10px;
 `
 const PollChoices = styled.ul`
   flex: 2;
