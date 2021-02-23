@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { PieChart } from 'react-minimal-pie-chart';
 import styled from "styled-components";
+import Modal from '@material-ui/core/Modal';
 import { SERVER_URL, initialData, COLOR } from '../../constant';
 import {
   requestUser,
@@ -168,10 +169,10 @@ function Home() {
     })
   }
 
-  const handleMouseHover = (index) => {
-    setHover(index)
+  const handleModalClose = () => {
+    setPollCreation(false);
   }
-console.log(hover)
+
   React.useEffect(() => {
     if (pollState.polls.length === 0) {
       fetchAllPolls()
@@ -180,29 +181,32 @@ console.log(hover)
 
   return (
     <div>
-      {userState && <NavContainer><ProfileLink to={`/user/${userState.user._id}`} >{userState.user.username}</ProfileLink><LogOutButton onClick={handleLogout}>Adiós</LogOutButton></NavContainer>}
-      {pollCreation ? <form onSubmit={handleSubmit}>
-        <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
-        <label>
-          <input onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
-        </label>
-        <div id={'option-input'}>
-
-          {
-            pollOptions.map((option, index) => {
-              return <>
-                <label>
-                  <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
-                  {(pollOptions.length > 2) && <button type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >-</button>}
-                </label>
-                {(index === pollOptions.length - 1 && pollOptions.length < 5) && <button type={'button'} onClick={(ev) => addOption(ev)} >+</button>}
-              </>
-            })
-          }
-
-        </div>
-        <button type={"submit"}>Submit Poll</button>
-      </form> : <div onClick={() => setPollCreation(!pollCreation)}>Create A Poll</div> }
+      {userState && <NavContainer><ProfileLink to={`/user/${userState.user._id}`} >{userState.user.username}</ProfileLink><Button onClick={() => setPollCreation(!pollCreation)}>Create A Poll</Button><Button onClick={handleLogout}>Adiós</Button></NavContainer>}
+      
+      <Modal open={pollCreation} onClose={handleModalClose}>
+        <SubmitPollForm onSubmit={handleSubmit}>
+          <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
+          <label>
+            <input onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
+          </label>
+          <div id={'option-input'}>
+  
+            {
+              pollOptions.map((option, index) => {
+                return <>
+                  <label>
+                    <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
+                    {(pollOptions.length > 2) && <button type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >-</button>}
+                  </label>
+                  {(index === pollOptions.length - 1 && pollOptions.length < 5) && <button type={'button'} onClick={(ev) => addOption(ev)} >+</button>}
+                </>
+              })
+            }
+  
+          </div>
+          <button type={"submit"}>Submit Poll</button>
+        </SubmitPollForm>
+      </Modal>
       
       <div>
         {
@@ -260,7 +264,7 @@ const ProfileLink = styled(Link)`
     border-radius: 5px;
   }
 `
-const LogOutButton = styled.button`
+const Button = styled.button`
   background-color: ${COLOR.ROCK};
   border: 2px solid ${COLOR.WOOD};
   border-radius: 5px;
@@ -275,6 +279,13 @@ const LogOutButton = styled.button`
     color: ${COLOR.ROCK};
   }
 `
+const SubmitPollForm = styled.form`
+  width: 400px;
+  height: 600px;
+  margin: 100px auto;
+  background-color: ${COLOR.ROCK};
+  border-radius: 5px;
+`
 const PollColorIndicator = styled.div`
   display: flex;
   justify-content: center;
@@ -287,7 +298,7 @@ const PollColorIndicator = styled.div`
 `
 const PollIndicatorContainer = styled.li`
   display: flex;
-  margin-top: 10px;
+  margin: 10px auto 0 auto;
   transform: translatey(-5px);
   cursor: pointer;
   font-weight: bold;
@@ -327,12 +338,13 @@ const PollName = styled(Link)`
 const PollDataContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   padding-bottom: 10px;
 `
 const PollChoices = styled.ul`
-  width: 200px;
+  width: 100px;
+  margin: auto;
 `
 const FirstToVoteContainer = styled.div`
   display: flex;
