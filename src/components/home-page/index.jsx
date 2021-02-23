@@ -221,8 +221,8 @@ console.log(hover)
             return <PollContainer key={index} >
               <PollName to={`/poll/${poll._id}`}>{poll.pollName}</PollName>
               <PollDataContainer>
-                {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '100px', margin: '10px 0', padding: '0px 50px', flex: '3' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <p>Be the first to vote</p>}
-  
+                  {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '300px', margin: '10px 0', padding: '0px 50px' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <FirstToVoteContainer><FirstToVoteParagraph>Be the first to vote!</FirstToVoteParagraph></FirstToVoteContainer>}
+    
                 <PollChoices>
                   {poll.options.map(option => {
                     return <>
@@ -327,10 +327,21 @@ const PollName = styled(Link)`
 const PollDataContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
   padding-bottom: 10px;
 `
 const PollChoices = styled.ul`
-  flex: 2;
+  width: 200px;
+`
+const FirstToVoteContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  height: 200px;
+  margin: 10px 0;
+`
+const FirstToVoteParagraph = styled.p`
+  font-weight: bold;
 `
