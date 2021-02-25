@@ -178,21 +178,21 @@ function Home() {
 
   return (
     <div>
-      {userState && <NavContainer><ProfileLink to={`/user/${userState.user._id}`} >{userState.user.username}</ProfileLink><Button onClick={() => setPollCreation(!pollCreation)}>Create A Poll</Button><Button onClick={handleLogout}>Adiós</Button></NavContainer>}
+      {userState && <NavContainer><ProfileLink to={`/user/${userState.user._id}`} >{userState.user.username}</ProfileLink><Buttons><Button onClick={() => setPollCreation(!pollCreation)}>Suggest A Poll</Button><Button onClick={handleLogout}>Adiós</Button></Buttons></NavContainer>}
       
       <Modal open={pollCreation} onClose={handleModalClose}>
         <SubmitPollForm onSubmit={handleSubmit}>
-          <p onClick={() => setPollCreation(!pollCreation)}>Hide</p>
+          <PollHide onClick={() => setPollCreation(!pollCreation)}>Hide</PollHide>
           <label>
-            <input onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
+            <PollInput onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
           </label>
-          <div id={'option-input'}>
+          <PollOptions id={'option-input'}>
   
             {
-              pollOptions.map((index) => {
+              pollOptions.map((options, index) => {
                 return <>
                   <label>
-                    <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
+                    <PollInput onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
                     {(pollOptions.length > 2) && <button type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >-</button>}
                   </label>
                   {(index === pollOptions.length - 1 && pollOptions.length < 5) && <button type={'button'} onClick={(ev) => addOption(ev)} >+</button>}
@@ -200,7 +200,7 @@ function Home() {
               })
             }
   
-          </div>
+          </PollOptions>
           <button type={"submit"}>Submit Poll</button>
         </SubmitPollForm>
       </Modal>
@@ -247,7 +247,7 @@ export default Home;
 
 const NavContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 `
 const ProfileLink = styled(Link)`
@@ -255,12 +255,14 @@ const ProfileLink = styled(Link)`
   text-transform: uppercase;
   font-weight: bold;
   padding: 5px 10px;
+  margin-left: 5px;
 
   &:hover {
     background-color: ${COLOR.LIGHTROCK};
     border-radius: 5px;
   }
 `
+const Buttons = styled.div``
 const Button = styled.button`
   background-color: ${COLOR.ROCK};
   border: 2px solid ${COLOR.WOOD};
@@ -283,6 +285,35 @@ const SubmitPollForm = styled.form`
   padding: 20px;
   background-color: ${COLOR.ROCK};
   border-radius: 5px;
+`
+const PollHide = styled.p`
+  color: ${COLOR.SAND};
+`
+const PollInput = styled.input`
+  width: 100%;
+  padding: 5px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  color: ${COLOR.SAND};
+  background-color: ${COLOR.LIGHTROCK};
+  border-bottom: 1px solid ${COLOR.SAND};
+  font-weight: bold;
+
+  &:focus {
+    border: none;
+    border-left: 2px solid ${COLOR.SAND};
+    border-right: 2px solid ${COLOR.SAND};
+  }
+  &::placeholder {
+    color: ${COLOR.SAND};
+    font-style: italic;
+    font-weight: normal;
+  }
+`
+const PollOptions = styled.div`
+  width: 100%;
 `
 const PollColorIndicator = styled.div`
   display: flex;
