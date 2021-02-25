@@ -6,9 +6,6 @@ import styled from "styled-components";
 import Modal from '@material-ui/core/Modal';
 import { SERVER_URL, initialData, COLOR } from '../../constant';
 import {
-  requestUser,
-  receiveUser,
-  userError,
   userLogout,
   receivePolls,
   requestPolls,
@@ -192,7 +189,7 @@ function Home() {
           <div id={'option-input'}>
   
             {
-              pollOptions.map((option, index) => {
+              pollOptions.map((index) => {
                 return <>
                   <label>
                     <input onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
@@ -283,6 +280,7 @@ const SubmitPollForm = styled.form`
   width: 400px;
   height: 600px;
   margin: 100px auto;
+  padding: 20px;
   background-color: ${COLOR.ROCK};
   border-radius: 5px;
 `
