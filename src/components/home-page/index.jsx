@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import { PieChart } from 'react-minimal-pie-chart';
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Modal from '@material-ui/core/Modal';
 import { SERVER_URL, initialData, COLOR } from '../../constant';
 import {
@@ -183,23 +183,23 @@ function Home() {
       <Modal open={pollCreation} onClose={handleModalClose}>
         <SubmitPollForm onSubmit={handleSubmit}>
           <PollHide onClick={() => setPollCreation(!pollCreation)}>Hide</PollHide>
-          <label>
-            <PollInput onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
-          </label>
+          <PollLabel>
+            <PollTitle onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
+          </PollLabel>
           <PollOptions id={'option-input'}>
-  
+
             {
               pollOptions.map((options, index) => {
                 return <>
-                  <label>
-                    <PollInput onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} type={'text'} placeholder={'Option'} required />
-                    {(pollOptions.length > 2) && <button type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >-</button>}
-                  </label>
-                  {(index === pollOptions.length - 1 && pollOptions.length < 5) && <button type={'button'} onClick={(ev) => addOption(ev)} >+</button>}
+                  <PollLabel>
+                    <PollInput onChange={(ev) => updateOptionName(ev, index)} value={pollOptions[index].title} className={`option-${index}`} style={pollOptions.length > 2 ? { borderTopRightRadius: '0', borderBottomRightRadius: '0' } : null} type={'text'} placeholder={'Option'} required />
+                    {(pollOptions.length > 2) && <PollRemove type={'button'} className={`option-${index}`} onClick={(ev) => removeOption(ev, index)} >Remove</PollRemove>}
+                  </PollLabel>
+                  {(index === pollOptions.length - 1 && pollOptions.length < 5) && <Button type={'button'} onClick={(ev) => addOption(ev)} >Add Option</Button>}
                 </>
               })
             }
-  
+
           </PollOptions>
           <button type={"submit"}>Submit Poll</button>
         </SubmitPollForm>
@@ -285,35 +285,71 @@ const SubmitPollForm = styled.form`
   padding: 20px;
   background-color: ${COLOR.ROCK};
   border-radius: 5px;
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
 `
 const PollHide = styled.p`
   color: ${COLOR.SAND};
 `
-const PollInput = styled.input`
-  width: 100%;
-  padding: 5px;
+const PollLabel = styled.label`
+  display: flex;
+  align-items: center;
+  background-color: ${COLOR.LIGHTROCK};
   margin: 10px 0;
   border-radius: 5px;
+`
+const PollRemove = styled.button`
+  background-color: ${COLOR.SAND};
   border: none;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
   outline: none;
-  color: ${COLOR.SAND};
-  background-color: ${COLOR.LIGHTROCK};
-  border-bottom: 1px solid ${COLOR.SAND};
-  font-weight: bold;
+  color: ${COLOR.LIGHTROCK};
+  padding: 5px;
+  border: 1px solid ${COLOR.SAND};
+  cursor: pointer;
 
-  &:focus {
-    border: none;
-    border-left: 2px solid ${COLOR.SAND};
-    border-right: 2px solid ${COLOR.SAND};
-  }
-  &::placeholder {
+  &:hover {
+    background-color: ${COLOR.LIGHTROCK};
     color: ${COLOR.SAND};
-    font-style: italic;
-    font-weight: normal;
+    border: none;
+    border-bottom: 2px solid ${COLOR.SAND};
   }
+`
+const InputStyles = css`
+width: 100%;
+padding: 5px;
+border-radius: 5px;
+border: none;
+outline: none;
+color: ${COLOR.SAND};
+background-color: ${COLOR.LIGHTROCK};
+border-bottom: 2px solid ${COLOR.SAND};
+font-weight: bold;
+
+&:focus {
+  border: none;
+  border-left: 3px solid ${COLOR.SAND};
+}
+&::placeholder {
+  color: ${COLOR.SAND};
+  font-style: italic;
+  font-weight: normal;
+}
+
+`
+const PollInput = styled.input`
+  ${InputStyles}
+`
+const PollTitle = styled.input`
+  ${InputStyles}
 `
 const PollOptions = styled.div`
   width: 100%;
+  text-align: center;
 `
 const PollColorIndicator = styled.div`
   display: flex;
