@@ -10,7 +10,6 @@ import {
   receivePolls,
   requestPolls,
   pollError,
-  votePoll,
 } from "../../reducer/action";
 
 function Home() {
@@ -185,7 +184,7 @@ function Home() {
           <PollHide onClick={() => setPollCreation(!pollCreation)}>Hide</PollHide>
           <PollForm>
             <PollLabel>
-              <PollTitle onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
+              <PollInput onChange={updatePollName} value={pollName} type={'text'} placeholder={'Poll Name'} required />
             </PollLabel>
             <PollOptions id={'option-input'}>
   
@@ -224,7 +223,7 @@ function Home() {
             return <PollContainer key={index} >
               <PollName to={`/poll/${poll._id}`}>{poll.pollName}</PollName>
               <PollDataContainer>
-                  {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '300px', margin: '10px 0', padding: '0px 50px' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <FirstToVoteContainer><FirstToVoteParagraph>Be the first to vote!</FirstToVoteParagraph></FirstToVoteContainer>}
+                  {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '300px', margin: '10px 0', padding: '0px 25px' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <FirstToVoteContainer><FirstToVoteParagraph>Be the first to vote!</FirstToVoteParagraph></FirstToVoteContainer>}
     
                 <PollChoices>
                   {poll.options.map(option => {
@@ -381,9 +380,6 @@ const InputStyles = css`
 const PollInput = styled.input`
   ${InputStyles}
 `
-const PollTitle = styled.input`
-  ${InputStyles}
-`
 const PollOptions = styled.div`
   width: 100%;
   text-align: center;
@@ -418,7 +414,10 @@ const PollContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 525px;
   width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
   background-color: ${COLOR.WOOD};
   margin-bottom: 20px;
   text-align: center;
@@ -446,7 +445,7 @@ const PollDataContainer = styled.div`
 `
 const PollChoices = styled.ul`
   width: 100px;
-  margin: auto;
+  margin: auto 20px auto 0;
 `
 const FirstToVoteContainer = styled.div`
   display: flex;
