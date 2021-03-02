@@ -206,7 +206,7 @@ function Home() {
         </SubmitPollForm>
       </Modal>
       
-      <div>
+      <PollsContainer>
         {
           pollState.polls.map((poll, index) => {
             let amountOfVotes = 0;
@@ -239,7 +239,7 @@ function Home() {
             </PollContainer>
           })
         }
-      </div>
+      </PollsContainer>
     </div>
   );
 }
@@ -384,6 +384,12 @@ const PollOptions = styled.div`
   width: 100%;
   text-align: center;
 `
+const PollsContainer = styled.div`
+  margin: 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+`
 const PollColorIndicator = styled.div`
   display: flex;
   justify-content: center;
@@ -419,7 +425,6 @@ const PollContainer = styled.div`
   margin: 0 auto;
   border-radius: 10px;
   background-color: ${COLOR.WOOD};
-  margin-bottom: 20px;
   text-align: center;
 `
 const PollName = styled(Link)`
