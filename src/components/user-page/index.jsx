@@ -1,23 +1,21 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory, useParams, Link } from "react-router-dom";
-import { PieChart } from 'react-minimal-pie-chart';
-import { SERVER_URL, initialData } from '../../constant';
+import { useHistory, Link } from "react-router-dom";
+import { SERVER_URL } from "../../constant";
+import styled from "styled-components";
 import {
-  requestUser,
-  receiveUser,
-  userError,
   userLogout,
   receivePolls,
   requestPolls,
   pollError,
-  votePoll,
 } from "../../reducer/action";
-import { COLOR } from '../../constant'
+import { COLOR } from "../../constant";
 
 function User() {
   const userState = useSelector((state) => state.user);
   const pollState = useSelector((state) => state.poll);
+
+  const [hover, setHover] = useState(-1);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -27,53 +25,122 @@ function User() {
 
     dispatch(userLogout());
 
-    history.push('/')
+    history.push("/");
 
     localStorage.clear();
-  }
+  };
   const fetchAllPolls = () => {
     dispatch(requestPolls());
 
     fetch(SERVER_URL + `/api/getpolls`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
-        dispatch(receivePolls(data.polls))
+        dispatch(receivePolls(data.polls));
       })
-      .catch(err => {
-        console.log(err.message)
-        dispatch(pollError(err.message))
-      })
-  }
+      .catch((err) => {
+        dispatch(pollError(err.message));
+      });
+  };
+
+  const handleNavigateHome = () => {
+    history.push("/");
+  };
+
+  const handleMouseEnter = (index) => {
+    setHover(index);
+  };
+  const handleMouseLeave = () => {
+    setHover(-1);
+  };
 
   React.useEffect(() => {
     if (pollState.polls.length === 0) {
-      fetchAllPolls()
+      fetchAllPolls();
     }
-  }, [])
-
-console.log(pollState.polls.length)
+  }, []);
+console.log(userState.user.votes, pollState.polls, localStorage)
   return (
     <>
-      <div>
-        <Link to={`/`}>Back To Voting</Link>
-        {userState && <button onClick={handleLogout}>Leave</button>}
-      </div>
-      {userState.user.votes && pollState.polls. length > 0 ? (
-        <div>
-          {userState.user.votes.map((userPoll) => {
+      <NavContainer>
+        <Buttons>
+          <Button onClick={handleNavigateHome}>Go Back Home</Button>
+          {userState && <Button onClick={handleLogout}>Adiós</Button>}
+        </Buttons>
+      </NavContainer>{" "}
+      {userState.user.votes && pollState.polls.length > 0 ? (
+        <Links>
+          {userState.user.votes.map((userPoll, index) => {
             return (
-              <Link to={`/poll/${userPoll}`}>
-                {pollState.polls.find((poll) => poll._id === userPoll).pollName}
-              </Link>
+              <LinkContainer>
+                <HoverLink style={hover === index ? { color: `${COLOR.SAND}` } : null}>
+                  {">"}
+                </HoverLink>
+                <PollLink
+                  to={`/poll/${userPoll}`}
+                  onMouseOver={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                  onFocus={() => handleMouseEnter(index)}
+                  onBlur={handleMouseLeave}
+                >
+                  {pollState.polls.find((poll) => poll._id === userPoll).pollName}
+                </PollLink>
+              </LinkContainer>
             );
           })}
-        </div>
+        </Links>
       ) : (
-        <p>you didn't vote yet</p>
+        <NoVoteYet>you didn't vote yet</NoVoteYet>
       )}
     </>
   );
 }
 
 export default User;
+
+const NavContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+const Buttons = styled.div``;
+const Button = styled.button`
+  background-color: ${COLOR.ROCK};
+  border: 2px solid ${COLOR.WOOD};
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 5px;
+  color: ${COLOR.SAND};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${COLOR.SAND};
+    border: 2px solid ${COLOR.SAND};
+    color: ${COLOR.ROCK};
+  }
+`;
+const Links = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+`;
+const PollLink = styled(Link)`
+  color: black;
+  cursor: pointer;
+  font-weight: bold;
+  line-height: 30px;
+  margin-left: 10px;
+`;
+const LinkContainer = styled.div`
+  display: flex;
+  height: 30px;
+`;
+
+const NoVoteYet = styled.p``;
+const HoverLink = styled.p`
+  color: ${COLOR.ROCK};
+  font-weight: bold;
+  transition: all 0.2s;
+  font-size: 1.2em;
+  line-height: 30px;
+`;
