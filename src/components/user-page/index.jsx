@@ -67,7 +67,7 @@ console.log(userState.user.votes, pollState.polls, localStorage)
           {userState && <Button onClick={handleLogout}>Adiós</Button>}
         </Buttons>
       </NavContainer>{" "}
-      {userState.user.votes && pollState.polls.length > 0 ? (
+      {userState.user.votes.length > 0 ? (
         <Links>
           {userState.user.votes.map((userPoll, index) => {
             return (

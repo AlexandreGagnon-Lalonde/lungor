@@ -9,6 +9,9 @@ import {
   receivePolls,
   requestPolls,
   pollError,
+  requestUser,
+  receiveUser,
+  userError,
 } from "../../reducer/action";
 import { COLOR } from '../../constant'
 
@@ -35,6 +38,27 @@ function Poll() {
     localStorage.clear();
   }
 
+  const fetchUser = () => {
+    dispatch(requestUser());
+
+    fetch(SERVER_URL + `/api/getuser/${userState.user.username}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({alreadyLoggedIn: true})
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(receiveUser(data.user))
+        console.log(data.user)
+      })
+      .catch(err => {
+        console.log(err.message)
+        dispatch(pollError(err.message))
+      })
+  }
+
   const handleVote = (ev, _id, title) => {
     ev.preventDefault();
 
@@ -52,6 +76,7 @@ function Poll() {
       .then(res => res.json())
       .then(poll => {
         fetchAllPolls()
+        fetchUser()
       })
       .catch(err => console.log(err))
   }

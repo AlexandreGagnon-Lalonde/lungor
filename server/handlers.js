@@ -65,7 +65,7 @@ const voteOnPoll = async (req, res) => {
     const poll = await db.collection('polls').findOne(pollQuery);
     const currentUser = await db.collection('users').findOne(userQuery);
 
-    const didUserVoteOnPoll = currentUser.votes.find(poll => poll === _id)
+    const didUserVoteOnPoll = currentUser.votes.find(poll => poll === _id);
 
     poll.options.map(option => {
       if (option.title === title && !option.voters.find(voter => voter === user.username)) {
@@ -82,6 +82,9 @@ const voteOnPoll = async (req, res) => {
 
     if (!didUserVoteOnPoll) {
       currentUser.votes.push(_id)
+    } else {
+      let pollIndex = currentUser.votes.indexOf(_id)
+      currentUser.votes.splice(pollIndex, 1)
     }
 
     const pollUpdated = {
@@ -99,11 +102,9 @@ const voteOnPoll = async (req, res) => {
     assert.equal(1, newPoll.matchedCount);
     assert.equal(1, newPoll.modifiedCount);
 
-    if (!didUserVoteOnPoll) {
-      const newUser = await db.collection('users').updateOne(userQuery, userUpdated)
-        assert.equal(1, newUser.matchedCount);
-        assert.equal(1, newUser.modifiedCount);
-    }
+    const newUser = await db.collection('users').updateOne(userQuery, userUpdated)
+      assert.equal(1, newUser.matchedCount);
+      assert.equal(1, newUser.modifiedCount);
 
     res.status(200).json({ status: 200, poll })
   } catch(err) {
@@ -142,7 +143,7 @@ const getUser = async (req, res) => {
   const client = await MongoClient(MONGO_URI, options);
 
   const { username } = req.params;
-  const { password } = req.body;
+  const { password, alreadyLoggedIn } = req.body;
   try {
     await client.connect();
 
@@ -155,6 +156,11 @@ const getUser = async (req, res) => {
     const userExist = user && user.username === username;
 
     const pwdIsOK = user && user.password === password;
+
+    if (alreadyLoggedIn) {
+      delete user.password
+      return res.status(200).json({ status: 200, user })
+    }
 
     if (userExist && pwdIsOK) {
       delete user.password

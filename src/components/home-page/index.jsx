@@ -10,6 +10,9 @@ import {
   receivePolls,
   requestPolls,
   pollError,
+  requestUser,
+  receiveUser,
+  userError,
 } from "../../reducer/action";
 
 function Home() {
@@ -70,8 +73,28 @@ function Home() {
     fetch(SERVER_URL + `/api/getpolls`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
         dispatch(receivePolls(data.polls))
+      })
+      .catch(err => {
+        console.log(err.message)
+        dispatch(pollError(err.message))
+      })
+  }
+
+  const fetchUser = () => {
+    dispatch(requestUser());
+
+    fetch(SERVER_URL + `/api/getuser/${userState.user.username}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({alreadyLoggedIn: true})
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(receiveUser(data.user))
+        console.log(data.user)
       })
       .catch(err => {
         console.log(err.message)
@@ -133,6 +156,7 @@ function Home() {
       .then(res => res.json())
       .then(poll => {
         fetchAllPolls()
+        fetchUser()
       })
       .catch(err => console.log(err))
   }
