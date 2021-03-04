@@ -269,7 +269,6 @@ const PollDataContainer = styled.div`
   padding: 10px 0;
 `
 const PollChoices = styled.ul`
-  width: 100px;
   margin: auto 20px auto 0;
 `
 const FirstToVoteContainer = styled.div`

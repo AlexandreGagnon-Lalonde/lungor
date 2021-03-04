@@ -431,6 +431,7 @@ const PollIndicatorContainer = styled.li`
   cursor: pointer;
   font-weight: bold;
   color: black;
+  width: auto;
 
   &:hover {
     color: ${COLOR.SAND};
@@ -473,7 +474,6 @@ const PollDataContainer = styled.div`
   padding-bottom: 10px;
 `
 const PollChoices = styled.ul`
-  width: 100px;
   margin: auto 20px auto 0;
 `
 const FirstToVoteContainer = styled.div`
