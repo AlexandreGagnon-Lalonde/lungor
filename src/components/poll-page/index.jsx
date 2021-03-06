@@ -150,7 +150,7 @@ function Poll() {
             })
 
             return <PollContainer key={index} >
-              <PollName to={`/poll/${poll._id}`}>{poll.pollName}</PollName>
+              <PollName>{poll.pollName}</PollName>
 
               <PollDataContainer>
                   {amountOfVotes > 0 ? <PieChart data={poll.options} segmentsStyle={{ cursor: 'pointer' }} style={{ width: '500px', margin: '10px 0', padding: '0px 25px' }} onClick={(ev, index) => handleVote(ev, poll._id, poll.options[index].title)} onMouseOver={(_, index) => {setHover({ pollName: poll.pollName, index })}} onMouseOut={() => setHover({pollName: '', index: -1})} startAngle={270} lineWidth={35} /> : <FirstToVoteContainer><FirstToVoteParagraph>Be the first to vote!</FirstToVoteParagraph></FirstToVoteContainer>}
@@ -248,7 +248,7 @@ const PollContainer = styled.div`
   left: 20px;
   right: 20px;
 `
-const PollName = styled(Link)`
+const PollName = styled.p`
   margin: 5px;
   width: auto;
   padding: 5px 20px;
@@ -256,10 +256,7 @@ const PollName = styled(Link)`
   border-radius: 5px;
   font-weight: bold;
   font-size: 1.4em;
-
-  &:hover {
-    background-color: ${COLOR.SAND};
-  }
+  cursor: default;
 `
 const PollDataContainer = styled.div`
   display: flex;
